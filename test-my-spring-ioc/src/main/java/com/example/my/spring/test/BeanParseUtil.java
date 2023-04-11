@@ -50,7 +50,7 @@ public class BeanParseUtil {
 
     private void initInstance() {
         for (BeanDefinition beanDefinition : beanDefinitions) {
-            String name = beanDefinition.getName();
+            String name = beanDefinition.getClassName();
             try {
                 beans.put(beanDefinition.getId(), Class.forName(name).newInstance());
             } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {

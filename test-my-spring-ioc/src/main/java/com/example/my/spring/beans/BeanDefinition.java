@@ -8,18 +8,18 @@ public class BeanDefinition {
 
     private String id;
 
-    private String name;
+    private String className;
 
     public BeanDefinition(String id, String name) {
         this.id = id;
-        this.name = name;
+        this.className = name;
     }
 
     public String getId() {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getClassName() {
+        return className;
     }
 }

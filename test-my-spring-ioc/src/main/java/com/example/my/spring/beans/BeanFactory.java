@@ -8,6 +8,6 @@ import com.example.my.spring.exception.BeansException;
  */
 public interface BeanFactory {
     Object getBean(String beanName) throws BeansException;
-
+    boolean containsBean(String beanName);
     void registerBeanDefinition(BeanDefinition definition) throws BeansException;
 }
