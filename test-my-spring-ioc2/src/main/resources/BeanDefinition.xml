@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<beans>
+    <bean id="userService" class="com.example.my.spring.service.impl.UserServiceImpl">
+        <constructor-arg name="name" type="String" value="lisi"/>
+        <constructor-arg name="age" type="Integer" value="15"/>
+        <property name="bService" type="com.example.my.spring.service.BService" ref="bService"/>
+    </bean>
+    <bean id="bService" class="com.example.my.spring.service.impl.BServiceImpl">
+        <property name="cService" type="com.example.my.spring.service.CService" ref="cService"/>
+    </bean>
+    <bean id="cService" class="com.example.my.spring.service.impl.CServiceImpl">
+        <property name="userService" type="com.example.my.spring.service.UserService" ref="userService"/>
+        <property name="property1" type="String" value="hello world"/>
+    </bean>
+</beans>
