@@ -10,6 +10,7 @@
     <modules>
         <module>test-my-spring-ioc</module>
         <module>test-my-spring-ioc2</module>
+        <module>test-my-spring-ioc-autowired</module>
     </modules>
     <modelVersion>4.0.0</modelVersion>
 
