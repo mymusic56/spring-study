@@ -3,7 +3,6 @@ package com.example.my.spring.framework.beans.factory.support;
 import com.example.my.spring.framework.beans.factory.BeanFactory;
 import com.example.my.spring.framework.beans.factory.config.*;
 import com.example.my.spring.framework.exception.BeansException;
-import com.example.my.spring.framework.beans.factory.config.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
@@ -16,14 +15,14 @@ import java.util.concurrent.ConcurrentHashMap;
 public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry
     implements BeanFactory, BeanDefinitionRegistry {
 
-    private Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>(256);
+    protected Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>(256);
 
-    private List<String> beanNames = new ArrayList<>();
+    protected List<String> beanDefinitionNames = new ArrayList<>();
 
     private final Map<String, Object> earlySingletonObjects = new HashMap<>();
 
     public void refresh() {
-        for (String beanName : beanNames) {
+        for (String beanName : beanDefinitionNames) {
             try {
                 getBean(beanName);
             } catch (BeansException e) {
@@ -49,14 +48,6 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry
                 BeanDefinition bd = this.getBeanDefinition(beanName);
                 singleton = this.createBean(bd);
                 this.registerSingleton(beanName, singleton);
-
-                applyBeanPostProcessorBeforeInitialization(singleton, beanName);
-                if (bd.getInitMethodName() != null && !"".equals(bd.getInitMethodName())) {
-                    // todo 这个初始化方法是干什么的
-                    this.invokeInitMethod(bd, singleton);
-                }
-
-                applyBeanPostProcessorAfterInitialization(singleton, beanName);
             }
         }
 
@@ -67,8 +58,6 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry
         return singleton;
     }
 
-
-
     @Override
     public boolean containsBean(String beanName) {
         return containsSingleton(beanName);
@@ -77,7 +66,7 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry
     @Override
     public void registerBeanDefinition(String beanName, BeanDefinition beanDefinition) {
         this.beanDefinitionMap.put(beanName, beanDefinition);
-        this.beanNames.add(beanName);
+        this.beanDefinitionNames.add(beanName);
 
         // 非懒加载 立即初始化对象
         if (!beanDefinition.isLazyInit()) {
@@ -91,7 +80,7 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry
 
     @Override
     public void removeBeanDefinition(String beanName) {
-        this.beanNames.remove(beanName);
+        this.beanDefinitionNames.remove(beanName);
         this.beanDefinitionMap.remove(beanName);
         this.removeSingleton(beanName);
     }
@@ -103,7 +92,7 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry
 
     @Override
     public boolean containsBeanDefinition(String beanName) {
-        return this.beanNames.contains(beanName);
+        return this.beanDefinitionNames.contains(beanName);
     }
 
     private Object createBean(BeanDefinition bd) throws BeansException {
@@ -217,16 +206,5 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry
 
         return obj;
     }
-
-    private void invokeInitMethod(BeanDefinition bd, Object singleton) {
-        // todo 这个初始化方法是干什么的
-
-    }
-
-    abstract public Object applyBeanPostProcessorBeforeInitialization(Object existingBean, String beanName)
-        throws BeansException;
-
-    abstract public Object applyBeanPostProcessorAfterInitialization(Object existingBean, String beanName)
-        throws BeansException;
 
 }

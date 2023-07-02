@@ -1,6 +1,5 @@
 package com.example.my.spring.framework.beans.factory;
 
-
 import com.example.my.spring.framework.exception.BeansException;
 
 /**
@@ -9,5 +8,12 @@ import com.example.my.spring.framework.exception.BeansException;
  */
 public interface BeanFactory {
     Object getBean(String beanName) throws BeansException;
+
     boolean containsBean(String beanName);
+
+    boolean isSingleton(String name);
+
+    boolean isPrototype(String name);
+
+    Class<?> getType(String name);
 }

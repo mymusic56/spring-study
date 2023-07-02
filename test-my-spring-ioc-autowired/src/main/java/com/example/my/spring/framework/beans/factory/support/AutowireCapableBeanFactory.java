@@ -1,53 +1,21 @@
 package com.example.my.spring.framework.beans.factory.support;
 
+import com.example.my.spring.framework.beans.factory.BeanFactory;
 import com.example.my.spring.framework.exception.BeansException;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AutowireCapableBeanFactory extends AbstractBeanFactory {
+/**
+ * 处理自动注入
+ */
+public interface AutowireCapableBeanFactory extends BeanFactory {
 
-    private List<AutowiredAnnotationBeanPostProcessor> processorList = new ArrayList<>();
+    int AUTOWIRE_NO = 0;
+    int AUTOWIRE_BY_NAME = 1;
+    int AUTOWIRE_BY_TYPE = 2;
 
-    public void addBeanPostProcessor(AutowiredAnnotationBeanPostProcessor processor) {
-        this.processorList.add(processor);
-    }
+    Object applyBeanPostProcessorsBeforeInitialization(Object existingBean, String beanName) throws BeansException;
 
-    public int getBeanPostProcessorCount() {
-        return this.processorList.size();
-    }
-
-    public List<AutowiredAnnotationBeanPostProcessor> getBeanPostProcessors() {
-        return this.processorList;
-    }
-
-    @Override
-    public Object applyBeanPostProcessorBeforeInitialization(Object existingBean, String beanName)
-        throws BeansException {
-        // 使用AutowiredAnnotationBeanPostProcessor 处理bean上的注解
-        Object result = existingBean;
-        for (AutowiredAnnotationBeanPostProcessor processor : processorList) {
-            processor.setBeanFactory(this);
-            result = processor.postProcessBeforeInitialization(existingBean, beanName);
-            if (result == null) {
-                return null;
-            }
-        }
-
-        return result;
-    }
-
-    @Override
-    public Object applyBeanPostProcessorAfterInitialization(Object existingBean, String beanName)
-        throws BeansException {
-        Object result = existingBean;
-        for (AutowiredAnnotationBeanPostProcessor processor : processorList) {
-            processor.setBeanFactory(this);
-            result = processor.postProcessAfterInitialization(existingBean, beanName);
-            if (result == null) {
-                return null;
-            }
-        }
-        return result;
-    }
+    Object applyBeanPostProcessorsAfterInitialization(Object existingBean, String beanName) throws BeansException;
 }
