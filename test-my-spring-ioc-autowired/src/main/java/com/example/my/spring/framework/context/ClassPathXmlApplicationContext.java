@@ -2,8 +2,9 @@ package com.example.my.spring.framework.context;
 
 
 import com.example.my.spring.framework.beans.factory.BeanFactory;
-import com.example.my.spring.framework.beans.factory.support.AutowireCapableBeanFactory;
+import com.example.my.spring.framework.beans.factory.support.AbstractAutowiredCapableBeanFactory;
 import com.example.my.spring.framework.beans.factory.support.AutowiredAnnotationBeanPostProcessor;
+import com.example.my.spring.framework.beans.factory.support.DefaultListableBeanFactory;
 import com.example.my.spring.framework.beans.factory.xml.XmlBeanDefinitionReader;
 import com.example.my.spring.framework.core.ClassPathXmlResource;
 import com.example.my.spring.framework.exception.BeansException;
@@ -14,12 +15,12 @@ import com.example.my.spring.framework.exception.BeansException;
  */
 public class ClassPathXmlApplicationContext implements BeanFactory {
 
-    private AutowireCapableBeanFactory beanFactory;
+    private AbstractAutowiredCapableBeanFactory beanFactory;
 
-    public ClassPathXmlApplicationContext(String xmlPath,boolean isRefresh) throws BeansException {
+    public ClassPathXmlApplicationContext(String xmlPath, boolean isRefresh) throws BeansException {
         ClassPathXmlResource xmlResource = new ClassPathXmlResource(xmlPath);
 
-        AutowireCapableBeanFactory beanFactory = new AutowireCapableBeanFactory();
+        AbstractAutowiredCapableBeanFactory beanFactory = new DefaultListableBeanFactory();
 
         XmlBeanDefinitionReader xmlBeanDefinitionReader = new XmlBeanDefinitionReader(beanFactory);
 
@@ -28,7 +29,7 @@ public class ClassPathXmlApplicationContext implements BeanFactory {
 
         this.beanFactory = beanFactory;
 
-        if(isRefresh) {
+        if (isRefresh) {
             // 加载所有的bean
             this.refresh();
         }
@@ -40,7 +41,7 @@ public class ClassPathXmlApplicationContext implements BeanFactory {
         this.beanFactory.refresh();
     }
 
-    private void registerBeanPostProcessor(AutowireCapableBeanFactory beanFactory) {
+    private void registerBeanPostProcessor(AbstractAutowiredCapableBeanFactory beanFactory) {
         beanFactory.addBeanPostProcessor(new AutowiredAnnotationBeanPostProcessor());
     }
 
@@ -52,5 +53,20 @@ public class ClassPathXmlApplicationContext implements BeanFactory {
     @Override
     public boolean containsBean(String beanName) {
         return this.beanFactory.containsBean(beanName);
+    }
+
+    @Override
+    public boolean isSingleton(String name) {
+        return beanFactory.isSingleton(name);
+    }
+
+    @Override
+    public boolean isPrototype(String name) {
+        return beanFactory.isPrototype(name);
+    }
+
+    @Override
+    public Class<?> getType(String name) {
+        return beanFactory.getType(name);
     }
 }

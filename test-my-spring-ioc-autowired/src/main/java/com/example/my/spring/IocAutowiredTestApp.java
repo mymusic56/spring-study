@@ -2,9 +2,6 @@ package com.example.my.spring;
 
 import com.example.my.spring.framework.exception.BeansException;
 import com.example.my.spring.framework.context.ClassPathXmlApplicationContext;
-import com.example.my.spring.service.BService;
-import com.example.my.spring.service.CService;
-import com.example.my.spring.service.UserService;
 import com.example.my.spring.service.impl.BServiceImpl;
 import com.example.my.spring.service.impl.CServiceImpl;
 import com.example.my.spring.service.impl.UserServiceImpl;
@@ -16,7 +13,7 @@ import org.dom4j.io.SAXReader;
 import java.net.URL;
 import java.util.Iterator;
 
-public class IocTestApp {
+public class IocAutowiredTestApp {
     public static void main(String[] args) throws BeansException {
         String beanConfigPath = "BeanDefinition.xml";
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(beanConfigPath, true);
